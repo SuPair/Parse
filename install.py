@@ -58,7 +58,7 @@ def install_node():
     logging.debug(tar_file.read())
 
     logging.debug("编译安装Node")
-    make_cmd = "./configure && make && make install"
+    make_cmd = "cd "+node_dir_path+"&& ./configure && make && make install"
     make_file = os.popen(make_cmd)
     logging.debug(make_file.read())
     logging.debug("编译安装完毕")
