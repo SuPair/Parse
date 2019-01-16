@@ -39,12 +39,13 @@ def install_node():
     logging.debug("下载并编译文件：")
     nodeVersion = "node-v10.15.0"
     node_file_path = "/usr/local/src/" + nodeVersion + ".tar.gz"
+    node_dir_path = "/usr/local/src/" + nodeVersion
     download_cmd = "cd /usr/local/src && wget https://nodejs.org/dist/v10.15.0/"+nodeVersion+".tar.gz "
     download_counts = 0
     while not os.access(node_file_path, os.F_OK):
         download_counts += 1
         if download_counts < 3:
-            logging.debug("尝试第"+download_counts+"下载！")
+            logging.debug("尝试第"+str(download_counts)+"下载！")
             downLoad_file = os.popen(download_cmd)
             logging.debug(downLoad_file.read())
         else:
@@ -65,30 +66,30 @@ def install_node():
     checkValue = 'v'
     # 检查Node版本
     if checkValue not in checkNodeVersion:
-        logging.debug("Node安装失败，清除安装数据第" + install_node_count + "次！")
+        logging.debug("Node安装失败，清除安装数据第" + str(install_node_count) + "次！")
 
         node_dir_path = "/usr/local/src/" + nodeVersion
         # 清理文件
-        if os.access(nodeFilePath, os.F_OK):
+        if os.access(node_file_path, os.F_OK):
             logging.debug("清理文件")
-            clearn_node_cmd = "rm -f "+nodeFilePath
+            clearn_node_cmd = "rm -f "+node_file_path
             clearn_file = os.popen(clearn_node_cmd)
             logging.debug(clearn_file.read())
             logging.debug("文件清理完毕")
         # 清理目录
         if os.path.exists(node_dir_path):
             logging.debug("清理文件夹")
-            clearn_node_cmd = "rm -rf " + nodeFilePath
+            clearn_node_cmd = "rm -rf " + node_dir_path
             clearn_file = os.popen(clearn_node_cmd)
             logging.debug(clearn_file.read())
             logging.debug("文件夹清理完毕")
         # 失败尝试
         if install_node_count < 3:
-            logging.debug("Node安装失败，尝试第"+install_node_count+"次！")
+            logging.debug("Node安装失败，尝试第"+str(install_node_count)+"次！")
             install_node_count += 1
             install_node()
         else:
-            logging.debug("Node安装失败，尝试第" + install_node_count + "次,退出程序！")
+            logging.debug("Node安装失败，尝试第" + str(install_node_count) + "次,退出程序！")
             exit()
     else:
         logging.debug("Node版本:"+checkNodeVersion.read())
