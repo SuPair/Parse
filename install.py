@@ -27,13 +27,16 @@ def install_node():
     global install_node_count
     logging.debug("开始安装Node")
     # 检查环境
-    checkGCCVersion = os.popen('gcc -v').read()
-    checkGCCValue = "gcc"
-    if checkGCCValue not in checkGCCVersion:
+    check_gcc_version = os.popen('gcc -v').read()
+    logging.debug(check_gcc_version)
+    check_gcc_value = "gcc"
+    if check_gcc_value not in check_gcc_version:
         logging.debug("未安装GCC，开始安装GCC")
-        checkGCCFile = os.popen("yum install gcc  gcc-c++ -y")
-        logging.debug(checkGCCFile.read())
+        install_gcc_file = os.popen("yum install gcc  gcc-c++ -y")
+        logging.debug(install_gcc_file.read())
         logging.debug("GCC安装完毕")
+    else:
+        logging.debug("GCC已安装！")
 
     # 下载文件并解压编译
     logging.debug("下载并编译文件：")
