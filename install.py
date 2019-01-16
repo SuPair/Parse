@@ -38,17 +38,35 @@ def install_node():
     # 下载文件并解压编译
     logging.debug("下载并编译文件：")
     nodeVersion = "node-v10.15.0"
-    downloadCMD = "cd /usr/local/src && wget https://nodejs.org/dist/v10.15.0/"+nodeVersion+".tar.gz " \
-                  "&& tar xvf "+nodeVersion+".tar.gz && cd "+nodeVersion+"/ && ./configure && make && make install"
-    downLoadFile = os.popen(downloadCMD)
-    logging.debug(downLoadFile.read())
+    node_file_path = "/usr/local/src/" + nodeVersion + ".tar.gz"
+    download_cmd = "cd /usr/local/src && wget https://nodejs.org/dist/v10.15.0/"+nodeVersion+".tar.gz "
+    download_counts = 0
+    while not os.access(node_file_path, os.F_OK):
+        download_counts += 1
+        if download_counts < 3:
+            logging.debug("尝试第"+download_counts+"下载！")
+            downLoad_file = os.popen(download_cmd)
+            logging.debug(downLoad_file.read())
+        else:
+            logging.debug("下载文件："+nodeVersion+".tar.gz失败，退出程序！")
+            exit(0)
+
+    logging.debug("解压文件")
+    tar_cmd = "tar xvf "+nodeVersion+".tar.gz"
+    tar_file = os.popen(tar_cmd)
+    logging.debug(tar_file.read())
+
+    logging.debug("编译安装Node")
+    make_cmd = "./configure && make && make install"
+    make_file = os.popen(make_cmd)
+    logging.debug(make_file.read())
     logging.debug("编译安装完毕")
     checkNodeVersion = os.popen('node -v').read()
     checkValue = 'v'
     # 检查Node版本
     if checkValue not in checkNodeVersion:
         logging.debug("Node安装失败，清除安装数据第" + install_node_count + "次！")
-        nodeFilePath = "/usr/local/src/"+nodeVersion+".tar.gz"
+
         node_dir_path = "/usr/local/src/" + nodeVersion
         # 清理文件
         if os.access(nodeFilePath, os.F_OK):
